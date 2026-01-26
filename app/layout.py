@@ -995,16 +995,15 @@ def create_layout():  # definir función que construye el layout
                     # modal de bienvenida
                     dbc.Modal(
                         [
-                            dbc.ModalHeader(dbc.ModalTitle("Welcome to the MSP GIS App")),
+                            dbc.ModalHeader(dbc.ModalTitle("Welcome")),
                             dbc.ModalBody(
                                 html.Div(
                                     [
-                                        html.P("Here a quick summary of how to use the app:"),
-                                        html.Ul([
-                                            html.Li("AAAAA."),
-                                            html.Li("BBBBB"),
-                                            html.Li("CCCCC"),
-                                        ]),
+                                        html.Div(
+                                            ["Welcome to the Marine Ecosystem Service Assessment Tool (MESAT). Here you can explore different management scenarios and their impacts on marine ecosystems, developed under ",
+                                            html.A("Egidazu-de la Parte(2026)", href="link/to/phd/thesis", target="_blank")
+                                            ]),
+                                        html.P(html.A("Read the documentation", href="https://begidazu.github.io/MESAT/")),
                                         html.Div(
                                             dbc.Checkbox(
                                                 id="welcome-dont-show",
