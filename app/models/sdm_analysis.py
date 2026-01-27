@@ -1,28 +1,10 @@
-# This code is used to analyse and obtain the results for the fish stock section.
 import os
 import re
 from pathlib import Path
 from typing import Dict, List, Optional, Any
-
-
-# Set working directory, folder names and paths, etc.
-results_wd = r"C:\Users\beñat.egidazu\Desktop\NAS\PhD\Papers\Fisheries_2\Results"
-
-sdms_dict = {
-    "sdms": "SDMs",
-    "species_folder": os.listdir(os.path.join(results_wd, "SDMs")),
-    "model_folder": "model=mpaeu",
-    "figures_folder": "figures",
-    "metrics_folder": "metrics",
-    "models_folder": "models",
-    "predictions_folder": "predictions",
-}
-
-# Set up class to manage SDM files
-import os
-import re
-from pathlib import Path
-from typing import Dict, List, Optional, Any
+import rasterio
+import numpy as np
+import pandas as pd
 
 class SDMFileManager:
     """
@@ -56,10 +38,14 @@ class SDMFileManager:
     'metrics':
         - taxonid: Species identifier
         - model: Model type
-        - method: Algorithm (e.g., 'ensemble', 'maxent', 'rf', 'xgboost')
+        - method: Algorithm (e.g., 'ensemble', 'maxent', 'rf', 'xgboost') [OPTIONAL - not present for some metrics]
         - what: Metric type (e.g., 'cvmetrics', 'fullmetrics', 'respcurves', 'varimportance', 
                   'biasmetrics', 'posteval', 'thresholds')
         - classification_ds_what: Alternative parameter
+        
+        NOTE: Some metrics files (biasmetrics, posteval, thresholds) don't have a 'method' parameter.
+              You can search for them without specifying method:
+                  manager.get_file(taxon_id='126421', folder_type='metrics', what='thresholds')
     
     'models':
         - taxonid: Species identifier
@@ -96,6 +82,13 @@ class SDMFileManager:
             taxon_id='126421',
             folder_type='metrics',
             method='ensemble'
+        )
+        
+        # Get thresholds (no method parameter required)
+        thresholds = manager.get_file(
+            taxon_id='126421',
+            folder_type='metrics',
+            what='thresholds'
         )
         
         # List available parameters for a folder type
@@ -474,3 +467,175 @@ class SDMFileManager:
                     print(f"  manager.get_files(taxon_id='{taxon_id}', folder_type='{folder_type}')")
                 
                 print()
+
+# ----------------------------- EXAMPLE USAGE --------------------------------------:
+sdm_root = r"C:\Users\beñat.egidazu\Desktop\NAS\PhD\Papers\Fisheries_2\Results\SDMs"
+
+# All methods properly documented with examples, parameter descriptions, and return types
+manager = SDMFileManager(sdm_root)
+
+# Select a taxon ID to use for all examples (change this to test different species)
+taxon_id = '126426'
+
+# Example 1: Get a specific prediction file
+file_path = manager.get_file(
+    taxon_id=taxon_id,
+    folder_type='metrics',
+    # method='ensemble',
+    what='thresholds',
+    # scen='2000_2010'    # To check all available scenarios, use example 3.
+)
+# print(f"File path: {file_path}; Exists: {os.path.exists(file_path) if file_path else False}")
+
+# Example 2: Get all metrics for a method
+files = manager.get_files(taxon_id=taxon_id, folder_type='metrics', method='ensemble')
+# print(f"Metric files found: {files}")
+
+# Example 3: List available scenarios
+params = manager.list_parameters(taxon_id, 'predictions')
+# print(f"Available scenarios: {params.get('scen', [])}")
+
+# Example 4: List available methods
+methods = manager.list_parameters(taxon_id, 'predictions')
+# print(f"Available methods: {methods.get('method', [])}")
+
+
+
+
+
+
+# -------------------------------------- FUNCTIONS TO COMPUTE CHAPTER RESULTS --------------------------------------:
+# Function to compute presence/absence results
+def compute_presence_absence(sdm_manager, presence_absence_dir,
+                             taxon_ids: list[str] | str = None, 
+                             methods: list[str] | str = None, 
+                             scenarios: list[str] | str = None,
+                             thresholds: list[str] | str = None) -> None:
+    """
+    Compute presence/absence results for combinations of taxon_id, method, and scenario.
+    
+    This function processes SDM prediction files and computes presence/absence data,
+    saving results to the pre-created folder structure.
+    
+    Args:
+        sdm_manager (SDMFileManager): SDM file manager instance
+        presence_absence_dir (str): Output directory for presence/absence results
+        taxon_ids (str or list): Taxon ID(s) to process. If None, processes all available.
+                                Examples: '126421' or ['126421', '126426', '126822']
+        methods (str or list): Methods to process. If None, processes all available.
+                              Examples: 'ensemble' or ['ensemble', 'maxent', 'rf', 'xgboost']
+        scenarios (str or list): Scenarios to process. If None, processes all available.
+                                Examples: 'current' or ['current', 'ssp585_dec100', '2020_2024']
+        thresholds (str or list): Threshold types to use for presence/absence calculation.
+                                    If None, uses all available thresholds.
+    
+    Returns:
+        None. Results are saved to disk in the presence_absence directory.
+    
+    Notes:
+        - Requires that the output folder structure has been created (see create_presence_absence_structure)
+        - Processes specified combinations iteratively
+        - To be implemented: actual presence/absence calculation logic
+    """
+    
+    # Convert single strings to lists for uniform processing
+    if isinstance(taxon_ids, str):
+        taxon_ids = [taxon_ids]
+    elif taxon_ids is None:
+        taxon_ids = sdm_manager.list_taxons()
+    
+    if isinstance(methods, str):
+        methods = [methods]
+    elif methods is None:
+        methods = sdm_manager.list_parameters(taxon_ids[0], 'predictions').get('method', [])
+    
+    if isinstance(scenarios, str):
+        scenarios = [scenarios]
+    elif scenarios is None:
+        scenarios = sdm_manager.list_parameters(taxon_ids[0], 'predictions').get('scen', [])
+    
+    if isinstance(thresholds, str):
+        thresholds = [thresholds]
+    elif thresholds is None:
+        thresholds_df = None
+        # Get all threshold options from the first taxon's thresholds file
+        try:
+            thresholds_file = sdm_manager.get_file(
+                taxon_id=taxon_ids[0],
+                folder_type='metrics',
+                what='thresholds'
+            )
+            if thresholds_file:
+                thresholds_df = pd.read_parquet(thresholds_file)
+                # Filter thresholds from thresholds names:
+                thresholds = [col for col in thresholds_df.columns if col != 'what']
+            else:
+                thresholds = []
+        except:
+            thresholds = []
+    
+    # Process each combination of taxon_id, method, scenario, and threshold
+    for taxon_id in taxon_ids:
+        for method in methods:
+            for scenario in scenarios:
+                for threshold in thresholds:
+                    # Get prediction file
+                    prediction_file = sdm_manager.get_file(
+                        taxon_id=taxon_id,
+                        folder_type='predictions',
+                        method=method,
+                        scen=scenario
+                    )
+                    
+                    if prediction_file is None:
+                        print(f"Warning: No prediction file found for taxon_id={taxon_id}, method={method}, scen={scenario}")
+                        continue
+                    
+                    # Build output path
+                    result_file = os.path.join(
+                        presence_absence_dir,
+                        f"taxonid={taxon_id}",
+                        f"method={method}",
+                        f"threshold={threshold}",
+                        f"{scenario}.tif"
+                    )
+
+                    # Create output directory if it doesn't exist
+                    Path(result_file).parent.mkdir(parents=True, exist_ok=True)
+
+                    # Get thresholds DataFrame if not already loaded:
+                    thresholds_file = sdm_manager.get_file(
+                        taxon_id=taxon_id,
+                        folder_type="metrics",
+                        what="thresholds"
+                    )
+
+                    # Open thresholds file and read into DataFrame
+                    thresholds_df = pd.read_parquet(thresholds_file)
+                    print(thresholds_df)
+                    # Filter threshold for current method:
+                    print(method)
+                    print(threshold)
+                    threshold_value = thresholds_df.loc[thresholds_df["model"] == method, threshold].values[0]
+                    print(threshold_value)
+                    
+                    # TODO: Implement actual presence/absence calculation
+                    with rasterio.open(prediction_file) as prediction_src:
+                        prediction = prediction_src.read(1) # read(2) for standard deviation id needed
+                        nodata_value = prediction_src.nodata
+                        
+                        # Create presence/absence array with nodata preserved
+                        presence_absence = np.where(prediction >= (threshold_value*100), 1, 0).astype(rasterio.uint8)
+                        
+                        # Preserve nodata values
+                        if nodata_value is not None:
+                            nodata_mask = prediction == nodata_value
+                            presence_absence[nodata_mask] = nodata_value
+                        
+                        # Save presence/absence raster
+                        profile = prediction_src.profile
+                        profile.update(dtype=rasterio.uint8, count=1, nodata=nodata_value)
+                        with rasterio.open(result_file, 'w', **profile) as dst:
+                            dst.write(presence_absence, 1)
+    
+    print(f"\nPresence/Absence computation completed.")

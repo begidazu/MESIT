@@ -1,35 +1,26 @@
 # This code is used to analyse and obtain the results for the fish stock section.
 import os
-from sdm_parser import SDMFileManager
+from sdm_analysis import SDMFileManager, compute_presence_absence
 
-# ----------------------------- EXAMPLE USAGE --------------------------------------:
-sdm_root = r"C:\Users\beñat.egidazu\Desktop\NAS\PhD\Papers\Fisheries_2\Results\SDMs"
+# Results working directory. Parent directory where all results of SDMs are and where all output will be saved:
+results_dir = r"C:\Users\beñat.egidazu\Desktop\NAS\PhD\Papers\Fisheries_2\Results"
 
-# All methods properly documented with examples, parameter descriptions, and return types
-manager = SDMFileManager(sdm_root)
+# SDMs working directory. Working directory where all SDM files are:
+sdms_dir = os.path.join(results_dir, "SDMs")
 
-# Select a taxon ID to use for all examples (change this to test different species)
-taxon_id = '126426'
+# Presence/Absence output directory (it is created if it does not exist):
+presence_absence_dir = os.path.join(results_dir, "presence_absence")
 
-# Example 1: Get a specific prediction file
-file_path = manager.get_file(
-    taxon_id=taxon_id,
-    folder_type='predictions',
-    method='ensemble',
-    scen='2000_2010'    # To check all available scenarios, use example 3.
+# Initialize the SDM file manager
+sdm_manager = SDMFileManager(sdms_dir)
+
+
+# Run presence/absence maps:
+compute_presence_absence(
+    sdm_manager,
+    presence_absence_dir,
+    taxon_ids=['126421', '126426', '126822'],
+    methods=['ensemble'],
+    scenarios=['2000_2010', '2010_2020'],
+    thresholds=['max_spec_sens']
 )
-print(f"File path: {file_path}; Exists: {os.path.exists(file_path) if file_path else False}")
-
-# Example 2: Get all metrics for a method
-files = manager.get_files(taxon_id=taxon_id, folder_type='metrics', method='ensemble')
-print(f"Metric files found: {files}")
-
-# Example 3: List available scenarios
-params = manager.list_parameters(taxon_id, 'predictions')
-print(f"Available scenarios: {params.get('scen', [])}")
-
-# Example 4: List available methods
-methods = manager.list_parameters(taxon_id, 'predictions')
-print(f"Available methods: {methods.get('method', [])}")
-
-
