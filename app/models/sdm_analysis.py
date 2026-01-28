@@ -2,6 +2,7 @@ import os
 import re
 from pathlib import Path
 from typing import Dict, List, Optional, Any
+import pyproj
 import rasterio
 import numpy as np
 import pandas as pd
@@ -639,3 +640,163 @@ def compute_presence_absence(sdm_manager, presence_absence_dir,
                             dst.write(presence_absence, 1)
     
     print(f"\nPresence/Absence computation completed.")
+
+# Function to create a table from presence/absence results table:
+def create_presence_absence_table():
+    """
+    Generate a presence/absence table with spatial extent in hectares per stock area.
+    Structure: Time frame | Stock 1 (ha) | Stock 2 (ha) | ...
+    """
+    
+    TAXON_CONFIG = {
+        126421: {
+            'species_name': 'Sardina pilchardus',
+            'stocks': [
+                ('Divisions 8.c and 9.a', r'C:\Users\beñat.egidazu\Desktop\NAS\PhD\Papers\Fisheries_2\Data_nca\Stock_ICES_Areas\Sardina_pilchardus.shp'),
+            ]
+        },
+        126426: {
+            'species_name': 'Engraulis encrasicolus',
+            'stocks': [
+                ('Subarea 8', r'C:\Users\beñat.egidazu\Desktop\NAS\PhD\Papers\Fisheries_2\Data_nca\Stock_ICES_Areas\Engraulis_encrasicolus_subarea8.shp'),
+                #('Division 9.a South', r'C:\path\to\shapefiles\engraulis_9a_south.shp'),
+            ]
+        },
+        126822: {
+            'species_name': 'Trachurus trachurus',
+            'stocks': [
+                ('Division 9.a', r'C:\Users\beñat.egidazu\Desktop\NAS\PhD\Papers\Fisheries_2\Data_nca\Stock_ICES_Areas\Trachurus_trachurus.shp'),
+            ]
+        },
+    }
+    
+    BASE_PATH = r'C:\Users\beñat.egidazu\Desktop\NAS\PhD\Papers\Fisheries_2\Results\presence_absence'
+    
+    # Temporal structure to store data
+    temp_data = {
+        'Time frame': [],
+        'Species - Stock': [],
+        'Extent (ha)': []
+    }
+    
+    # Loop for each taxonid
+    for taxonid, config in TAXON_CONFIG.items():
+        species_name = config['species_name']
+        
+        taxon_path = os.path.join(BASE_PATH, f'taxonid={taxonid}', 'method=ensemble', 'threshold=max_spec_sens')    # Modify method & threshold as needed.
+        
+        if not os.path.exists(taxon_path):
+            print(f"WARNING: Path not found for taxonid: {taxonid}")
+            continue
+        
+        # Loop for each stock
+        for stock_name, shapefile_path in config['stocks']:
+            tif_files = {}
+            for file in os.listdir(taxon_path):
+                if file.endswith('.tif'):
+                    if '2000_2010' in file:
+                        tif_files['2000 - 2010'] = os.path.join(taxon_path, file)
+                    elif '2010_2020' in file:
+                        tif_files['2010 - 2020'] = os.path.join(taxon_path, file)
+                    # Add scenarios as needed.
+            
+            # Compute extent for each period
+        for period, tif_path in tif_files.items():
+            if os.path.exists(tif_path):
+                # Compute extent in hectares from SDM presence/absence in the stock area:
+                extent_ha = calculate_extent_from_tif(tif_path, shapefile_path)
+                
+                # Temporal data:
+                temp_data['Time frame'].append(period)
+                temp_data['Species - Stock'].append(f'{species_name} {stock_name}')
+                temp_data['Extent (ha)'].append(extent_ha)
+    
+    # Converto temporal to dataframe:
+    df_temp = pd.DataFrame(temp_data)
+    
+    # Pivote table to desired format:
+    df_pivot = df_temp.pivot_table(
+        index='Time frame',
+        columns='Species - Stock',
+        values='Extent (ha)',
+        aggfunc='first'
+    )
+    
+    # Rename columns to include (ha)
+    df_pivot.columns = [col + ' (ha)' for col in df_pivot.columns]
+    
+    # Create Net Change row
+    net_change_row = df_pivot.loc['2010 - 2020'] - df_pivot.loc['2000 - 2010']
+    net_change_row.name = 'Net Change'
+    df_pivot = pd.concat([df_pivot, net_change_row.to_frame().T])
+    
+    # Reset index to have Tome frame in the first column:
+    df_pivot.index.name = 'Time-frame'
+    df_pivot = df_pivot.reset_index()
+    df_pivot.columns.name = None
+    
+    return df_pivot
+
+# Function to compute extent from presence/absence TIF using a mask:
+def calculate_extent_from_tif(tif_path: str, shapefile_path: str) -> float:
+    """
+    Calculate extent in hectares from TIF file by vectorizing presence pixels.
+    Vectorizes pixels with presence (=1), clips to the stock area shapefile and computes the geodesic area of the presence polygons.
+    
+    Args:
+        tif_path : str. Path to the TIF file with presence/absence.
+        shapefile_path : str. Path to the stock area shapefile
+
+    Returns:
+        float. Extension in hectares gcomputed as the geodesic area.
+    """
+    from rasterio.features import shapes
+    import geopandas as gpd
+    from shapely.geometry import shape
+
+    # PROJ del venv (pyproj)
+    os.environ["PROJ_LIB"] = pyproj.datadir.get_data_dir()
+
+    try:
+        # Read shapefile of the stock area
+        stock_gdf = gpd.read_file(shapefile_path)
+        
+        # Open the TIF and vectorize pixels with presence (value= 1)
+        with rasterio.open(tif_path) as src:
+            data = src.read(1)
+            crs = src.crs
+            
+            # Vectorize: create polygons from pixels with value == 1
+            presence_geometries = []
+            for geom, value in shapes(data, transform=src.transform):
+                if value == 1:  # Only pixels with presence
+                    presence_geometries.append(shape(geom))
+        
+        # Create GeoDataFrame with presence geometries
+        if not presence_geometries:
+            print(f"No presence pixels found in {tif_path}")
+            return 0.0
+        
+        gdf_presence = gpd.GeoDataFrame(geometry=presence_geometries, crs=crs)
+        
+        # Filter by stock area
+        gdf_filtered = gpd.clip(gdf_presence, stock_gdf)
+        
+        if gdf_filtered.empty:
+            print(f"No presence pixels found inside the stock assessment area in {tif_path}")
+            return 0.0
+        
+        # Dissolve geometries
+        gdf_dissolved = gdf_filtered.dissolve()
+        
+        # Calculate geodesic area directly in CRS 4326
+        area_m2 = gdf_dissolved.geometry.to_crs('+proj=cea').area.sum()
+        area_ha = area_m2 / 10000
+        
+        return area_ha
+        
+    except Exception as e:
+        print(f"Error processing {tif_path}: {e}")
+        import traceback
+        traceback.print_exc()
+        return 0.0
