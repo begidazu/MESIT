@@ -839,6 +839,7 @@ def graph_stocks(
 
     """
     import matplotlib.pyplot as plt
+    from matplotlib.ticker import FuncFormatter
     
     # Validate inputs
     if x is None or y is None:
@@ -881,6 +882,9 @@ def graph_stocks(
             fig, ax = plt.subplots(figsize=figsize)
             
             ax.plot(df[x], df[y], marker='o', linewidth=2, markersize=6, label=sheet)
+            
+            # Format x-axis to remove commas from numbers
+            ax.xaxis.set_major_formatter(FuncFormatter(lambda x, p: '{:.0f}'.format(x)))
             
             ax.set_xlabel(x_label if x_label else x, fontsize=12, fontweight='bold')
             ax.set_ylabel(y_label if y_label else y, fontsize=12, fontweight='bold')
