@@ -37,24 +37,31 @@ class MPAEU_AWS_Utils:
     @staticmethod
     def mpaeu_tif_vsis3(taxonid: int, model: str, method: str, scenario: str) -> str:
         """ Constructs the path to retrieve the SDM prediction COG"""
-        base = PurePosixPath("mpaeu-dist/results/species")
+        #base = PurePosixPath("mpaeu-dist/results/species")
+        base = PurePosixPath("obis-maps/sdm/species")
         tif_name = f"taxonid={taxonid}_model={model}_method={method}_scen={scenario}.tif"
         key = base / f"taxonid={taxonid}" / f"model={model}" / "predictions" / tif_name
+        print(f"TIF path: /vsis3/{key}")
         return f"/vsis3/{key}"
     
     @staticmethod
     def mpaeu_tif_mask_vsis3(taxonid: int, model: str, mask_model: str) -> str:
         """ Constructs the path to retireve the SDM mask"""
-        base = PurePosixPath("mpaeu-dist/results/species")
+        #base = PurePosixPath("mpaeu-dist/results/species")
+        #s3://obis-maps/sdm/species/taxonid=495082/model=mpaeu/predictions/taxonid=495082_model=mpaeu_what=mask_cog.tif
+        base = PurePosixPath("obis-maps/sdm/species")
         tif_name = f"taxonid={taxonid}_model={mask_model}.tif"
         key = base / f"taxonid={taxonid}" / f"model={model}" / "predictions" / tif_name
+        print(f"MASK path: /vsis3/{key}")
         return f"/vsis3/{key}"
     
     @staticmethod
     def mpaeu_presence_threshold_p10(taxonid: int, model: str = "mpaeu") -> int:
         """ Obtains the p10 threshold from the parquet file in the S3 bucket. More info in : https://iobis.github.io/mpaeu_docs/datause.html"""
-        path = (f"mpaeu-dist/results/species/taxonid={taxonid}/model={model}/metrics/"
-                f"taxonid={taxonid}_model={model}_what=thresholds.parquet") 
+        # path = (f"mpaeu-dist/results/species/taxonid={taxonid}/model={model}/metrics/"
+        #         f"taxonid={taxonid}_model={model}_what=thresholds.parquet") 
+        path = (f"obis-maps/sdm/species/taxonid={taxonid}/model={model}/metrics/"
+                f"taxonid={taxonid}_model={model}_what=thresholds.parquet")
         fs = s3fs.S3FileSystem(anon=True)
 
         schema = pa.schema([("model", pa.string()), ("p10", pa.float64())])
@@ -68,7 +75,8 @@ class MPAEU_AWS_Utils:
     @staticmethod
     def fit_regions_prediction(taxonid: int, model: str, method: str, scenario: str, presence_threshold: float = 50):
         """ Fits the SDM predictions to the selected threshold and returns the masked prediction, the masked presence/absence, extent of the prediction and SDM coordinate system"""
-        mask_model = "mpaeu_mask_cog"
+        #mask_model = "mpaeu_mask_cog"
+        mask_model = "mpaeu_what=mask_cog"
         predic_path = MPAEU_AWS_Utils.mpaeu_tif_vsis3(taxonid, model, method, scenario)
         mask_path = MPAEU_AWS_Utils.mpaeu_tif_mask_vsis3(taxonid, model, mask_model)
         presence_threshold = MPAEU_AWS_Utils.mpaeu_presence_threshold_p10(taxonid, model)
