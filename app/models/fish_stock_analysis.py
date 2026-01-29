@@ -38,6 +38,7 @@ graph_stocks(excel_file=r"C:\Users\beñat.egidazu\Desktop\NAS\PhD\Papers\Fisheri
              x_label="Year",
              y="StockSize",
              y_label="SSB (tonnes)",
+             color = 'green',
              year_column="Year",
              year_range=(2000,2020),
              title="Trachurus trachurus Spawning Stock Biomass in Division 9.a",

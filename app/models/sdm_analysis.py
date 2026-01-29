@@ -810,6 +810,7 @@ def graph_stocks(
     x_label: str = None,
     y: str = None,
     y_label: str = None,
+    color: Optional[str] = 'black',
     year_column: Optional[str] = None,
     year_range: Optional[tuple] = None,
     title: Optional[str] = None,
@@ -827,6 +828,7 @@ def graph_stocks(
         x_label: str. Label for X-axis.
         y: str. Column name for Y-axis.
         y_label: str. Label for Y-axis.
+        color: str, optional. Color for the plot line. Default is 'black'.
         year_column: str, optional. Column name containing year data. Used to filter by year_range.
         year_range: tuple, optional. Tuple (min_year, max_year) to filter data before plotting. Example: (2010, 2020) will only plot data from 2010 to 2020.
         title: str, optional. Title for the plot. If None, defaults to the sheet name.
@@ -881,7 +883,7 @@ def graph_stocks(
             # Create plot
             fig, ax = plt.subplots(figsize=figsize)
             
-            ax.plot(df[x], df[y], marker='o', linewidth=2, markersize=6, label=sheet)
+            ax.plot(df[x], df[y], marker='o', linewidth=2, markersize=6, label=sheet, color=color)
             
             # Format x-axis to remove commas from numbers
             ax.xaxis.set_major_formatter(FuncFormatter(lambda x, p: '{:.0f}'.format(x)))
