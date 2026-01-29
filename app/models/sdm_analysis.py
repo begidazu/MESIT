@@ -893,8 +893,20 @@ def graph_stocks(
             # Save if requested
             if save_path:
                 save_file = save_path.format(sheet=sheet) if "{sheet}" in save_path else save_path
-                fig.savefig(save_file, dpi=300, bbox_inches='tight')
-                print(f"Plot saved: {save_file}")
+                try:
+                    # Use format='png' explicitly with Agg backend to avoid PIL issues
+                    fig.savefig(save_file, dpi=300, bbox_inches='tight', format='png')
+                    print(f"Plot saved: {save_file}")
+                except Exception as save_error:
+                    print(f"Error saving plot to {save_file}: {save_error}")
+                    # Try alternative save method using matplotlib's canvas
+                    try:
+                        canvas = fig.canvas
+                        canvas.draw()
+                        fig.savefig(save_file, dpi=300, bbox_inches='tight')
+                        print(f"Plot saved (alternative method): {save_file}")
+                    except Exception as alt_error:
+                        print(f"Failed to save plot with alternative method: {alt_error}")
             
             # Show plot
             if show_plot:
