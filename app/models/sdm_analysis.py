@@ -800,3 +800,107 @@ def calculate_extent_from_tif(tif_path: str, shapefile_path: str) -> float:
         import traceback
         traceback.print_exc()
         return 0.0
+    
+
+# Function to graph SSB(biomass)/t, landings/t and SP/t
+def graph_stocks(
+    excel_file: str,
+    sheet_name: Optional[str] = None,
+    x: str = None,
+    x_label: str = None,
+    y: str = None,
+    y_label: str = None,
+    year_column: Optional[str] = None,
+    year_range: Optional[tuple] = None,
+    title: Optional[str] = None,
+    figsize: tuple = (12, 6),
+    show_plot: bool = True,
+    save_path: Optional[str] = None
+) -> None:
+    """
+    Generate plots from Excel file data with multiple sheets (one per stock).
+    
+    Args:
+        excel_file: str. Path to the Excell file containing the data.
+        sheet_name: str, optional. Name of the sheet to plot. If None, all sheets will be plotted.
+        x: str. Column name for X-axis.
+        x_label: str. Label for X-axis.
+        y: str. Column name for Y-axis.
+        y_label: str. Label for Y-axis.
+        year_column: str, optional. Column name containing year data. Used to filter by year_range.
+        year_range: tuple, optional. Tuple (min_year, max_year) to filter data before plotting. Example: (2010, 2020) will only plot data from 2010 to 2020.
+        title: str, optional. Title for the plot. If None, defaults to the sheet name.
+        figsize: tuple. Figure size (width, height) in inches. Default: (12, 6).
+        show_plot: bool. If True, display the plot. Default: True.
+        save_path: str, optional. Path to save the plot. If None, plot is not saved.
+    
+    Returns:
+        None. Displays and/or saves the plot.
+
+    """
+    import matplotlib.pyplot as plt
+    
+    # Validate inputs
+    if x is None or y is None:
+        raise ValueError("Both 'x' and 'y' column names must be provided.")
+    
+    if not os.path.exists(excel_file):
+        raise FileNotFoundError(f"Excel file not found: {excel_file}")
+    
+    # Determine which sheets to read
+    if sheet_name:
+        sheets = [sheet_name]
+    else:
+        sheets = pd.read_excel(excel_file, sheet_name=None).keys()
+    
+    # Process each sheet
+    for sheet in sheets:
+        try:
+            df = pd.read_excel(excel_file, sheet_name=sheet)
+            
+            # Validate columns exist
+            if x not in df.columns:
+                print(f"Warning: Column '{x}' not found in sheet '{sheet}'. Skipping.")
+                continue
+            if y not in df.columns:
+                print(f"Warning: Column '{y}' not found in sheet '{sheet}'. Skipping.")
+                continue
+            
+            # Filter by year range if specified
+            if year_range is not None and year_column is not None:
+                if year_column not in df.columns:
+                    print(f"Warning: Year column '{year_column}' not found in sheet '{sheet}'. No filtering applied.")
+                else:
+                    min_year, max_year = year_range
+                    df = df[(df[year_column] >= min_year) & (df[year_column] <= max_year)]
+                    if df.empty:
+                        print(f"No data found for years {min_year}-{max_year} in sheet '{sheet}'.")
+                        continue
+            
+            # Create plot
+            fig, ax = plt.subplots(figsize=figsize)
+            
+            ax.plot(df[x], df[y], marker='o', linewidth=2, markersize=6, label=sheet)
+            
+            ax.set_xlabel(x_label if x_label else x, fontsize=12, fontweight='bold')
+            ax.set_ylabel(y_label if y_label else y, fontsize=12, fontweight='bold')
+            ax.set_title(title if title else f"{sheet} - {y} vs {x}", fontsize=14, fontweight='bold')
+            ax.grid(True, alpha=0.3)
+            ax.legend()
+            
+            plt.tight_layout()
+            
+            # Save if requested
+            if save_path:
+                save_file = save_path.format(sheet=sheet) if "{sheet}" in save_path else save_path
+                fig.savefig(save_file, dpi=300, bbox_inches='tight')
+                print(f"Plot saved: {save_file}")
+            
+            # Show plot
+            if show_plot:
+                plt.show()
+            else:
+                plt.close(fig)
+            
+        except Exception as e:
+            print(f"Error processing sheet '{sheet}': {e}")
