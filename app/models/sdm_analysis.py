@@ -1,7 +1,7 @@
 import os
 import re
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Sequence, Union
 import pyproj
 import rasterio
 import numpy as np
@@ -802,15 +802,14 @@ def calculate_extent_from_tif(tif_path: str, shapefile_path: str) -> float:
         return 0.0
     
 
-# Function to graph SSB(biomass)/t, landings/t and SP/t
 def graph_stocks(
     excel_file: str,
     sheet_name: Optional[str] = None,
     x: str = None,
     x_label: str = None,
-    y: str = None,
-    y_label: str = None,
-    color: Optional[str] = 'black',
+    y: Union[str, Sequence[str]] = None,              
+    y_label: Union[str, Sequence[str], None] = None,  
+    color: Union[str, Sequence[str], None] = 'black',
     year_column: Optional[str] = None,
     year_range: Optional[tuple] = None,
     title: Optional[str] = None,
@@ -820,7 +819,8 @@ def graph_stocks(
 ) -> None:
     """
     Generate plots from Excel file data with multiple sheets (one per stock).
-    
+    Allows plotting one or multiple Y series on the same axis.
+
     Args:
         excel_file: str. Path to the Excell file containing the data.
         sheet_name: str, optional. Name of the sheet to plot. If None, all sheets will be plotted.
@@ -838,37 +838,70 @@ def graph_stocks(
     
     Returns:
         None. Displays and/or saves the plot.
-
     """
+
     import matplotlib.pyplot as plt
     from matplotlib.ticker import FuncFormatter
-    
+
     # Validate inputs
     if x is None or y is None:
         raise ValueError("Both 'x' and 'y' column names must be provided.")
-    
+
     if not os.path.exists(excel_file):
         raise FileNotFoundError(f"Excel file not found: {excel_file}")
-    
+
+    # Normalize y to a list
+    if isinstance(y, str):
+        y_list = [y]
+    else:
+        y_list = list(y)
+
+    # Determine series labels (legend labels)
+    # - If y_label is a list -> use that as legend labels
+    # - If y_label is a string -> use y column names as legend labels (and y_label for axis)
+    # - If y_label is None -> use y column names
+    axis_y_label = None
+    if isinstance(y_label, (list, tuple)):
+        series_labels = list(y_label)
+        if len(series_labels) != len(y_list):
+            raise ValueError("If 'y_label' is a list, it must have the same length as 'y'.")
+        axis_y_label = "Value"  # o déjalo None si no quieres etiqueta por defecto
+    else:
+        series_labels = y_list[:]  # default legend labels = column names
+        axis_y_label = y_label if isinstance(y_label, str) else None
+
+    # Normalize colors
+    if color is None:
+        color_list = [None] * len(y_list)  # matplotlib elige
+    elif isinstance(color, str):
+        # si dan un único color y hay varias series, lo repetimos
+        color_list = [color] * len(y_list)
+    else:
+        color_list = list(color)
+        if len(color_list) != len(y_list):
+            raise ValueError("If 'color' is a list, it must have the same length as 'y'.")
+
     # Determine which sheets to read
     if sheet_name:
         sheets = [sheet_name]
     else:
         sheets = pd.read_excel(excel_file, sheet_name=None).keys()
-    
+
     # Process each sheet
     for sheet in sheets:
         try:
             df = pd.read_excel(excel_file, sheet_name=sheet)
-            
+
             # Validate columns exist
             if x not in df.columns:
                 print(f"Warning: Column '{x}' not found in sheet '{sheet}'. Skipping.")
                 continue
-            if y not in df.columns:
-                print(f"Warning: Column '{y}' not found in sheet '{sheet}'. Skipping.")
+
+            missing_y = [col for col in y_list if col not in df.columns]
+            if missing_y:
+                print(f"Warning: Columns {missing_y} not found in sheet '{sheet}'. Skipping.")
                 continue
-            
+
             # Filter by year range if specified
             if year_range is not None and year_column is not None:
                 if year_column not in df.columns:
@@ -879,46 +912,50 @@ def graph_stocks(
                     if df.empty:
                         print(f"No data found for years {min_year}-{max_year} in sheet '{sheet}'.")
                         continue
-            
+
             # Create plot
             fig, ax = plt.subplots(figsize=figsize)
-            
-            ax.plot(df[x], df[y], marker='o', linewidth=2, markersize=6, label=sheet, color=color)
-            
-            # Format x-axis to remove commas from numbers
-            ax.xaxis.set_major_formatter(FuncFormatter(lambda x, p: '{:.0f}'.format(x)))
-            
+
+            # Plot each Y series
+            for yi, lbl, c in zip(y_list, series_labels, color_list):
+                ax.plot(df[x], df[yi], marker='o', linewidth=2, markersize=6, label=lbl, color=c)
+
+            # Format x-axis
+            ax.xaxis.set_major_formatter(FuncFormatter(lambda v, p: '{:.0f}'.format(v)))
+
             ax.set_xlabel(x_label if x_label else x, fontsize=12, fontweight='bold')
-            ax.set_ylabel(y_label if y_label else y, fontsize=12, fontweight='bold')
-            ax.set_title(title if title else f"{sheet} - {y} vs {x}", fontsize=14, fontweight='bold')
+
+            # Y-axis label: only one axis label makes sense if multiple series
+            if axis_y_label:
+                ax.set_ylabel(axis_y_label, fontsize=12, fontweight='bold')
+            else:
+                # si solo hay una serie y no te pasaron y_label, usa el nombre de la columna
+                if len(y_list) == 1:
+                    ax.set_ylabel(y_list[0], fontsize=12, fontweight='bold')
+
+            # Title
+            if title:
+                ax.set_title(title, fontsize=14, fontweight='bold')
+            else:
+                if len(y_list) == 1:
+                    ax.set_title(f"{sheet} - {y_list[0]} vs {x}", fontsize=14, fontweight='bold')
+                else:
+                    ax.set_title(f"{sheet} - {', '.join(y_list)} vs {x}", fontsize=14, fontweight='bold')
+
             ax.grid(True, alpha=0.3)
             ax.legend()
-            
             plt.tight_layout()
-            
+
             # Save if requested
             if save_path:
                 save_file = save_path.format(sheet=sheet) if "{sheet}" in save_path else save_path
-                try:
-                    # Use format='png' explicitly with Agg backend to avoid PIL issues
-                    fig.savefig(save_file, dpi=300, bbox_inches='tight', format='png')
-                    print(f"Plot saved: {save_file}")
-                except Exception as save_error:
-                    print(f"Error saving plot to {save_file}: {save_error}")
-                    # Try alternative save method using matplotlib's canvas
-                    try:
-                        canvas = fig.canvas
-                        canvas.draw()
-                        fig.savefig(save_file, dpi=300, bbox_inches='tight')
-                        print(f"Plot saved (alternative method): {save_file}")
-                    except Exception as alt_error:
-                        print(f"Failed to save plot with alternative method: {alt_error}")
-            
-            # Show plot
+                fig.savefig(save_file, dpi=300, bbox_inches='tight', format='png')
+                print(f"Plot saved: {save_file}")
+
             if show_plot:
                 plt.show()
             else:
                 plt.close(fig)
-            
+
         except Exception as e:
             print(f"Error processing sheet '{sheet}': {e}")
