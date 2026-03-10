@@ -36,8 +36,8 @@ is a map with the location of Physical Account and Saltmarsh Evolution locations
 
 The affection results are presented in table format. Each economic activity potential affection is further divided into three affection 
 subdivisions -- EUNIS, saltmarshes and fish -- that represent the affection of the economic activities to the respective 
-subdivision based on the results presented by [Egidazu-de la Parte *et al.* (2026)](https://docs.google.com/document/d/1qBrr96Hek-HVC-K4_4n9cyR9cEJ_d24o/edit?tab=t.0#heading=h.i7jku579q3oc) 
-(EUNIS habitats), [Egidazu-de la Parte *et al.* (2025)](https://doi.org/10.1016/j.scitotenv.2024.17816) (Saltmarshes) and [poner link fish study]() (Fish). You can filter the 
+subdivision based on the results presented by [Egidazu-de la Parte *et al.* (2026a)](https://doi.org/10.1016/j.indic.2026.101163) 
+(EUNIS habitats), [Egidazu-de la Parte *et al.* (2025)](https://doi.org/10.1016/j.scitotenv.2024.17816) (Saltmarshes) and [Egidazu-de la Parte et al., 2026b](https://docs.google.com/document/d/1UD0k6_jr48X6berBKhTpq2o8N7_TC3oTDW3cty7i6Go/edit?tab=t.0) (Fish). You can filter the 
 results using SQL queries.
 
 ![Economic activities affection example](images/economic_affection_docs.png){fig-cap="Economic affections" width=75%}
@@ -47,7 +47,7 @@ Below is a breakdown of what each of the subdivisions represents:
 - EUNIS: *economic activity* + *EUNIS* tab includes the **extent (km^2^)** of EUNIS habitat types affected by each activity and 
 the **condition** of the affected portion of the habitat. The **condition** metric is an indicator of the 
 underlaying status of the habitat and scores vary from 0 (very low condition) to 5 (very high condition). For more detailed information see [Physical Accounts section](physical_accounts.qmd) and 
-[Egidazu-de la Parte *et al.* (2026)](https://docs.google.com/document/d/1qBrr96Hek-HVC-K4_4n9cyR9cEJ_d24o/edit?tab=t.0#heading=h.i7jku579q3oc). 
+[Egidazu-de la Parte *et al.* (2026)](https://doi.org/10.1016/j.indic.2026.101163). 
 - Saltmarshes: *economic activity* + *Saltmarshes* tab includes the **extent** (ha) of *saltmarsh*, *mudflat*, *upland areas* and 
 *channel* affected by the corresponding activity, as well as the **expected accretion** (main driver of carbon sequestration in intertidal ecosystems), under a set of climate change scenarios, 
 in those areas that the activities will be located. For more detailed information on the modelling process see [Saltmarsh Evolution section](saltmarsh.qmd) and [Egidazu-de la Parte *et al.* (2025)](https://doi.org/10.1016/j.scitotenv.2024.17816). 
