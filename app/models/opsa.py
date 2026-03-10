@@ -125,8 +125,23 @@ def compute_condition_mean(
     conf = co_df.mean(axis=1, skipna=True)  # media CO por fila ignorando NaN
     cond = cond.clip(lower=0, upper=5)  # acotar a 0–5
     # conf puede estar en [0,1] o similar según tus datos; la dejamos tal cual tras NaN→promedio
-    gdf[out_field_condition] = cond.astype(float)  # escribir condición
-    gdf[out_field_confidence] = conf.astype(float)  # escribir confianza
+    
+    # CAMBIO: Si no existen las columnas _pa, crearlas como backup de los originales
+    # De esta forma, los valores originales nunca se sobreescriben
+    if "condition_pa" not in gdf.columns:  # si es la primera ejecución
+        gdf["condition_pa"] = gdf.get("condition", cond)  # copiar condition original como backup
+    if "confidence_pa" not in gdf.columns:  # si es la primera ejecución
+        gdf["confidence_pa"] = gdf.get("confidence", conf)  # copiar confidence original como backup
+    
+    # Guardar NUEVOS valores calculados en las columnas _pa (Physical Accounts)
+    # Así condition/confidence originales nunca se tocan
+    gdf[out_field_condition] = cond.astype(float)  # escribir condición en condition_pa
+    gdf[out_field_confidence] = conf.astype(float)  # escribir confianza en confidence_pa
+
+    # CÓDIGO ANTERIOR COMENTADO (sobreescribía las columnas originales):
+    # gdf[out_field_condition] = cond.astype(float)  # escribir condición
+    # gdf[out_field_confidence] = conf.astype(float)  # escribir confianza
+    # (donde out_field_condition y out_field_confidence eran "condition" y "confidence")
 
     # Discretización estable en servidor:
     # 0 -> NoData ; 1:(0,1] ; 2:(1,2] ; 3:(2,3] ; 4:(3,4] ; 5:(4,5]
@@ -136,7 +151,7 @@ def compute_condition_mean(
     cls = pd.cut(cond_valid, bins=bins, labels=labels, right=True, include_lowest=False)  # clasificar
     cls = cls.astype("float")  # pasar a float (por NaN en cut)
     cls = cls.fillna(0).astype(int)  # NaN→0 (NoData), y entero
-    gdf[out_field_class] = cls  # escribir clase discreta
+    gdf[out_field_class] = cls  # escribir clase discreta en condition_class_pa
 
     # Diagnóstico (opcional):
     try:
@@ -150,7 +165,7 @@ def compute_condition_mean(
     geojson_dict = json.loads(gdf.to_json())  # exportar GeoJSON como dict
     return geojson_dict, parquet_path  # devolver datos y ruta
 
-# API 2: resumen ponderado por tipo de habitat
+# Function 2: resumen ponderado por tipo de habitat
 
 def compute_summary_by_habitat_type(  # calcular resumen por 'habitat type' del parquet enriquecido
     parquet_path: str,  # ruta al parquet (el mismo que actualiza compute_condition_mean)
@@ -159,11 +174,25 @@ def compute_summary_by_habitat_type(  # calcular resumen por 'habitat type' del 
 ) -> pd.DataFrame:  # devuelve DataFrame con columnas: group, condition_wavg, confidence_wavg, area_ha
     # Leer el parquet ya enriquecido con 'condition' y 'confidence'
     gdf = gpd.read_parquet(parquet_path)  # leer GeoParquet
+    
+    # CAMBIO: Buscar primero 'condition_pa' y 'confidence_pa' (físical_accounts)
+    # Si existen, usarlas (son los valores dinámicos seleccionados)
+    # Si no existen, usar 'condition' y 'confidence' (columnas originales)
+    cond_col = "condition_pa" if "condition_pa" in gdf.columns else "condition"  # elegir columna
+    conf_col = "confidence_pa" if "confidence_pa" in gdf.columns else "confidence"  # elegir columna
+    
     # Validar columnas mínimas
-    needed = {group_field, "area", "condition", "confidence"}  # conjunto de columnas imprescindibles
+    needed = {group_field, "area", cond_col, conf_col}  # conjunto de columnas imprescindibles
     missing = [c for c in needed if c not in gdf.columns]  # detectar ausentes
     if missing:  # si faltan columnas
         raise KeyError(f"Faltan columnas en el parquet para el resumen: {missing}")  # error claro
+
+    # CÓDIGO ANTERIOR COMENTADO (siempre usaba 'condition' y 'confidence'):
+    # # Validar columnas mínimas
+    # needed = {group_field, "area", "condition", "confidence"}  # conjunto de columnas imprescindibles
+    # missing = [c for c in needed if c not in gdf.columns]  # detectar ausentes
+    # if missing:  # si faltan columnas
+    #     raise KeyError(f"Faltan columnas en el parquet para el resumen: {missing}")  # error claro
 
     # Convertir área a hectáreas según el área de estudio
     if study_area == "": 
@@ -171,9 +200,14 @@ def compute_summary_by_habitat_type(  # calcular resumen por 'habitat type' del 
     else:  # North_Sea y Santander: 'area' en km²
         area_ha = pd.to_numeric(gdf["area"], errors="coerce").astype(float) / 1000000.0  # m² → km2
 
-    # Preparar valores como float
-    cond = pd.to_numeric(gdf["condition"], errors="coerce").astype(float)  # condición
-    conf = pd.to_numeric(gdf["confidence"], errors="coerce").astype(float)  # confianza
+    # Preparar valores como float (usando las columnas elegidas)
+    cond = pd.to_numeric(gdf[cond_col], errors="coerce").astype(float)  # condición (condition_pa o condition)
+    conf = pd.to_numeric(gdf[conf_col], errors="coerce").astype(float)  # confianza (confidence_pa o confidence)
+    
+    # CÓDIGO ANTERIOR COMENTADO (siempre usaba columns hardcodeadas):
+    # cond = pd.to_numeric(gdf["condition"], errors="coerce").astype(float)  # condición
+    # conf = pd.to_numeric(gdf["confidence"], errors="coerce").astype(float)  # confianza
+    
     # Tratamiento de NoData: condición ≤ 0 se ignora (NaN) en el promedio
     cond = cond.where(cond > 0, np.nan)  # ≤0 → NaN (NoData)
 

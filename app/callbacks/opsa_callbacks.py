@@ -131,18 +131,34 @@ def register_opsa_tab_callbacks(app: dash.Dash):  # registrar callbacks del tab 
         if not (n and area and components):  # validar entradas
             raise PreventUpdate  # no actualizar
 
-        # 1) Ejecutar modelo -> GeoJSON con 'condition', 'confidence' y 'condition_class'
+        # CAMBIO: Usar columnas dinámicas 'condition_pa', 'confidence_pa', 'condition_class_pa'
+        # para que physical_accounts no sobrescriba las columnas originales 'condition' y 'confidence'
+        # que son usadas por management_scenarios
         geojson, parquet_path = compute_condition_mean(  # llamar a la función del modelo
             study_area=area,  # área
             components=components,  # lista de EC
-            out_field_condition="condition",  # campo condición
-            out_field_confidence="confidence",  # campo confianza
-            out_field_class="condition_class",  # campo clase discreta 0..5
+            out_field_condition="condition_pa",  # campo condición (PA = Physical Accounts, dinámico)
+            out_field_confidence="confidence_pa",  # campo confianza (PA = Physical Accounts, dinámico)
+            out_field_class="condition_class_pa",  # campo clase discreta 0..5 (PA)
             persist=True  # persistir en parquet
         )
+        
+        # CÓDIGO ANTERIOR COMENTADO (usaba columnas originales):
+        # geojson, parquet_path = compute_condition_mean(  # llamar a la función del modelo
+        #     study_area=area,  # área
+        #     components=components,  # lista de EC
+        #     out_field_condition="condition",  # campo condición
+        #     out_field_confidence="confidence",  # campo confianza
+        #     out_field_class="condition_class",  # campo clase discreta 0..5
+        #     persist=True  # persistir en parquet
+        # )
 
         # 2) Dividir en 6 FeatureCollections por clase 0..5
-        buckets = _split_geojson_by_class(geojson, class_field="condition_class")  # dividir
+        # CAMBIO: usar class_field="condition_class_pa" en lugar de "condition_class"
+        buckets = _split_geojson_by_class(geojson, class_field="condition_class_pa")  # dividir (usar condition_class_pa)
+        # CÓDIGO ANTERIOR COMENTADO:
+        # buckets = _split_geojson_by_class(geojson, class_field="condition_class")  # dividir
+        
         # paleta por clase 1..5 (verde claro→oscuro)
         class_colors = {1:'#edf8e9', 2:'#bae4b3', 3:'#74c476', 4:'#31a354', 5:'#006d2c'}  # colores
         layers = []  # lista de capas a devolver
