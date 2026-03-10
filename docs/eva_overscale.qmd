@@ -35,19 +35,19 @@ The overscaling methodology follows the subsequent steps:
 2. Computes the Ecological Value score (very low: 0–1; low: 1–2; medium: 2–3; high: 3–4; very high: 4–5) for each AQ and Ecosystem Component:
     1. **AQ1**
         1. Parses the Locally Rare Feature TaxonIDs configured by the user.
-        2. Gets the predicted suitability maps for each TaxonID from the [Amazon S3 bucket](https://mpaeu-dist.s3.amazonaws.com/index.html#).
+        2. Gets the predicted suitability maps for each TaxonID from the [Amazon S3 bucket endpoint](https://radiantearth.github.io/stac-browser/#/external/obis-maps.s3.us-east-1.amazonaws.com/sdm/stac/catalog.json).
         3. Converts the suitability maps into binary presence/absence using percentile 10 as threshold.
         4. Selects the Locally Rare Features based on the user-defined threshold.
         5. Computes the score using those TaxonIDs identified as Locally Rare Features.
     2. **AQ5**
         1. Parses the Nationally Rare Features configured by the user.
-        2. Gets the predicted suitability maps for each TaxonID from the [Amazon S3 bucket](https://mpaeu-dist.s3.amazonaws.com/index.html#).
+        2. Gets the predicted suitability maps for each TaxonID from the [Amazon S3 bucket](https://radiantearth.github.io/stac-browser/#/external/obis-maps.s3.us-east-1.amazonaws.com/sdm/stac/catalog.json).
         3. Converts the suitability maps into binary presence/absence using percentile 10 as threshold.
         4. Selects the Nationally Rare Features based on the EEZ and grid configuration (if presence < threshold → Nationally Rare).
         5. Computes the score using those TaxonIDs identified as Nationally Rare Features.
     3. **AQ7**
         1. Parses the Locally Rare Feature TaxonIDs configured by the user.
-        2. Gets the predicted suitability maps for each TaxonID from the [Amazon S3 bucket](https://mpaeu-dist.s3.amazonaws.com/index.html#).
+        2. Gets the predicted suitability maps for each TaxonID from the [Amazon S3 bucket](https://radiantearth.github.io/stac-browser/#/external/obis-maps.s3.us-east-1.amazonaws.com/sdm/stac/catalog.json).
         3. Converts the suitability maps into binary presence/absence using percentile 10 as threshold.
         4. Computes the score using all TaxonIDs passed in the other AQs.
     4. **AQ10**
@@ -78,5 +78,6 @@ It can also be used to identify areas with low condition where either policy or 
 
 1. Derous, S., Agardy, T., Hillewaert, H., Hostens, K., Jamieson, G., Lieberknecht, L., Mees, J., Moulaert, I., Olenin, S., Paelinckx, D., Rabaut, M., Rachor, E., Roff, J., Stienen, E.W.M., van der Wal, J.T., Van Lancker, V., Verfaillie, E., Vincx, M., Weslawski, J.M. and Degraer, S., A concept for biological valuation in the marine environment, *Oceanologia 49* (1) (2007) 99-128.
 2. Derous, S., Austen, M, Claus, S., Daan, N., Dauvin, J.-C., Deneudt, K., Depestele, J., Desroy, N., Heessen, H., Hostens, K., Marboe, A.H., Lescrauwaet, A.-K., Moreno, M.P., Moulaert, I., Paelinckx, D., Rabaut, M., Rees, H., Ressurreicao, A., Roff, J., Santos, P.T., Speybroeck, J., Stienen, E.W.M., Tatarek, A., Hofstede, R.T., Vincx, M., Zarzycki, T. and Degraer, S., Building on the concept of marine biological valuation with respect to translating it to a practical protocol: Viewpoints derived from a joint ENCORA-MARBEF initiative, *Oceanologia 49* (4) (2007) 579-586. https://bibliotekanauki.pl/articles/48603
-3. OBIS (2025) Ocean Biodiversity Information System. Intergovernmental Oceanographic Commission of UNESCO. https://obis.org.
-4. Ocean Biodiversity information System (OBIS). (2024). Species distribution dashboard for MPA Europe. (version 0.1.0). https://shiny.obis.org/distmaps. Zenodo. https://doi.org/10.5281/zenodo.14524781
+3. Egidazu-de la Parte, B., Balbi, S., Villa, F., Franco, A., Luisetti, T., Burdon, D., Ondiviela, B., Galván, C., Kolbuk, D., Bremner, J., Boone, W., Heynderyckx, H., Deneudt, K., Pascual, M. (2026). Integrated methods for marine physical accounting. *Environmental and Sustainability Indicators*, *30*, 101163. [https://doi.org/10.1016/j.indic.2026.101163](https://doi.org/10.1016/j.indic.2026.101163)
+4. OBIS (2025) Ocean Biodiversity Information System. Intergovernmental Oceanographic Commission of UNESCO. https://obis.org.
+5. Ocean Biodiversity information System (OBIS). (2024). Species distribution dashboard for MPA Europe. (version 0.1.0). https://shiny.obis.org/distmaps. Zenodo. https://doi.org/10.5281/zenodo.14524781
