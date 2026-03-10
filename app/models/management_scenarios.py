@@ -32,38 +32,56 @@ SALTMARSH_SCENARIOS_PATHS = {
     "Santander": {
         "regional_rcp45": {
             "habitats": {
-                "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2012_7g.tif",
-                "2062": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2062_7g.tif",
-                "2112": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2112_7g.tif"
+                "2012": "results/saltmarshes/Bay_of_Santander/regional_rcp45/santander_reg_rcp45_2012_7g.tif",
+                "2062": "results/saltmarshes/Bay_of_Santander/regional_rcp45/santander_reg_rcp45_2062_7g.tif",
+                "2112": "results/saltmarshes/Bay_of_Santander/regional_rcp45/santander_reg_rcp45_2112_7g.tif"
+                # "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2012_7g.tif",
+                # "2062": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2062_7g.tif",
+                # "2112": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2112_7g.tif"
             },
             "accretion": {
-                "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2012_7g_accretion.tif",
-                "2062": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2062_7g_accretion.tif",
-                "2112": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2112_7g_accretion.tif"
+                "2012": "results/saltmarshes/Bay_of_Santander/regional_rcp45/santander_reg_rcp45_2012_7g_accretion.tif",
+                "2062": "results/saltmarshes/Bay_of_Santander/regional_rcp45/santander_reg_rcp45_2062_7g_accretion.tif",
+                "2112": "results/saltmarshes/Bay_of_Santander/regional_rcp45/santander_reg_rcp45_2112_7g_accretion.tif"
+                # "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2012_7g_accretion.tif",
+                # "2062": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2062_7g_accretion.tif",
+                # "2112": r"results\saltmarshes\Bay_of_Santander\regional_rcp45\santander_reg_rcp45_2112_7g_accretion.tif"
             }
         },
         "regional_rcp85": {
             "habitats": {
-                "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp45_2012_7g.tif",
-                "2062": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp85_2062_7g.tif",
-                "2112": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp85_2112_7g.tif"
+                "2012": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2012_7g.tif",
+                "2062": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2062_7g.tif",
+                "2112": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2112_7g.tif"
+                # "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp45_2012_7g.tif",
+                # "2062": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp85_2062_7g.tif",
+                # "2112": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp85_2112_7g.tif"
             },
             "accretion": {
-                "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp45_2012_7g_accretion.tif",
-                "2062": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp85_2062_7g_accretion.tif",
-                "2112": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp85_2112_7g_accretion.tif"
+                "2012": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2012_7g_accretion.tif",
+                "2062": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2062_7g_accretion.tif",
+                "2112": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2112_7g_accretion.tif"
+                # "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp45_2012_7g_accretion.tif",
+                # "2062": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp85_2062_7g_accretion.tif",
+                # "2112": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp85_2112_7g_accretion.tif"
             }
         },
         "global_rcp45":  {
             "habitats": {
-                "2012": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_reg_rcp45_2012_7g.tif",
-                "2062": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_glo_rcp45_2062_7g.tif",
-                "2112": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_glo_rcp45_2112_7g.tif"
+                "2012": "results/saltmarshes/Bay_of_Santander/global_rcp45/santander_reg_rcp45_2012_7g.tif",
+                "2062": "results/saltmarshes/Bay_of_Santander/global_rcp45/santander_glo_rcp45_2062_7g.tif",
+                "2112": "results/saltmarshes/Bay_of_Santander/global_rcp45/santander_glo_rcp45_2112_7g.tif"
+                # "2012": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_reg_rcp45_2012_7g.tif",
+                # "2062": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_glo_rcp45_2062_7g.tif",
+                # "2112": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_glo_rcp45_2112_7g.tif"
             },
             "accretion": {
-                "2012": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_reg_rcp45_2012_7g_accretion.tif",
-                "2062": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_glo_rcp45_2062_7g_accretion.tif",
-                "2112": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_glo_rcp45_2112_7g_accretion.tif"
+                "2012": "results/saltmarshes/Bay_of_Santander/global_rcp45/santander_reg_rcp45_2012_7g_accretion.tif",
+                "2062": "results/saltmarshes/Bay_of_Santander/global_rcp45/santander_glo_rcp45_2062_7g_accretion.tif",
+                "2112": "results/saltmarshes/Bay_of_Santander/global_rcp45/santander_glo_rcp45_2112_7g_accretion.tif"
+                # "2012": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_reg_rcp45_2012_7g_accretion.tif",
+                # "2062": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_glo_rcp45_2062_7g_accretion.tif",
+                # "2112": r"results\saltmarshes\Bay_of_Santander\global_rcp45\santander_glo_rcp45_2112_7g_accretion.tif"
             }
         }
     },
@@ -71,38 +89,56 @@ SALTMARSH_SCENARIOS_PATHS = {
     "Cadiz_Bay": {
         "regional_rcp45": {
             "habitats": {
-                "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2023_25g.tif",
-                "2073": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2073_25g.tif",
-                "2123": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2123_25g.tif"
+                "2023": "results/saltmarshes/Cadiz_Bay/regional_rcp45/cadiz_reg_rcp45_2023_25g.tif",
+                "2073": "results/saltmarshes/Cadiz_Bay/regional_rcp45/cadiz_reg_rcp45_2073_25g.tif",
+                "2123": "results/saltmarshes/Cadiz_Bay/regional_rcp45/cadiz_reg_rcp45_2123_25g.tif"
+                # "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2023_25g.tif",
+                # "2073": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2073_25g.tif",
+                # "2123": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2123_25g.tif"
             },
             "accretion": {
-                "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2023_25g_accretion.tif",
-                "2073": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2073_25g_accretion.tif",
-                "2123": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2123_25g_accretion.tif"
+                "2023": "results/saltmarshes/Cadiz_Bay/regional_rcp45/cadiz_reg_rcp45_2023_25g_accretion.tif",
+                "2073": "results/saltmarshes/Cadiz_Bay/regional_rcp45/cadiz_reg_rcp45_2073_25g_accretion.tif",
+                "2123": "results/saltmarshes/Cadiz_Bay/regional_rcp45/cadiz_reg_rcp45_2123_25g_accretion.tif"
+                # "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2023_25g_accretion.tif",
+                # "2073": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2073_25g_accretion.tif",
+                # "2123": r"results\saltmarshes\Cadiz_Bay\regional_rcp45\cadiz_reg_rcp45_2123_25g_accretion.tif"
             }
         },
         "regional_rcp85": {
             "habitats": {
-                "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp45_2023_25g.tif",
-                "2073": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp85_2073_25g.tif",
-                "2123": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp85_2123_25g.tif"
+                "2023": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2023_25g.tif",
+                "2073": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2073_25g.tif",
+                "2123": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2123_25g.tif"
+                # "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp45_2023_25g.tif",
+                # "2073": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp85_2073_25g.tif",
+                # "2123": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp85_2123_25g.tif"
             },
             "accretion": {
-                "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp45_2023_25g_accretion.tif",
-                "2073": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp85_2073_25g_accretion.tif",
-                "2123": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp85_2123_25g_accretion.tif"
+                "2023": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2023_25g_accretion.tif",
+                "2073": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2073_25g_accretion.tif",
+                "2123": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2123_25g_accretion.tif"
+                # "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp45_2023_25g_accretion.tif",
+                # "2073": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp85_2073_25g_accretion.tif",
+                # "2123": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp85_2123_25g_accretion.tif"
             }
         },
         "global_rcp45":  {
             "habitats": {
-                "2023": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_reg_rcp45_2023_25g.tif",
-                "2073": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_glo_rcp45_2073_25g.tif",
-                "2123": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_glo_rcp45_2123_25g.tif"
+                "2023": "results/saltmarshes/Cadiz_Bay/global_rcp45/cadiz_reg_rcp45_2023_25g.tif",
+                "2073": "results/saltmarshes/Cadiz_Bay/global_rcp45/cadiz_glo_rcp45_2073_25g.tif",
+                "2123": "results/saltmarshes/Cadiz_Bay/global_rcp45/cadiz_glo_rcp45_2123_25g.tif"
+                # "2023": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_reg_rcp45_2023_25g.tif",
+                # "2073": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_glo_rcp45_2073_25g.tif",
+                # "2123": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_glo_rcp45_2123_25g.tif"
             },
             "accretion": {
-                "2023": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_reg_rcp45_2023_25g_accretion.tif",
-                "2073": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_glo_rcp45_2073_25g_accretion.tif",
-                "2123": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_glo_rcp45_2123_25g_accretion.tif"
+                "2023": "results/saltmarshes/Cadiz_Bay/global_rcp45/cadiz_reg_rcp45_2023_25g_accretion.tif",
+                "2073": "results/saltmarshes/Cadiz_Bay/global_rcp45/cadiz_glo_rcp45_2073_25g_accretion.tif",
+                "2123": "results/saltmarshes/Cadiz_Bay/global_rcp45/cadiz_glo_rcp45_2123_25g_accretion.tif"
+                # "2023": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_reg_rcp45_2023_25g_accretion.tif",
+                # "2073": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_glo_rcp45_2073_25g_accretion.tif",
+                # "2123": r"results\saltmarshes\Cadiz_Bay\global_rcp45\cadiz_glo_rcp45_2123_25g_accretion.tif"
             }
         }
     },
@@ -110,38 +146,56 @@ SALTMARSH_SCENARIOS_PATHS = {
     "Urdaibai_Estuary": {
         "regional_rcp45": {
             "habitats": {
-                "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2017_17g.tif",
-                "2067": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2067_17g.tif",
-                "2117": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2117_17g.tif"
+                "2017": "results/saltmarshes/Urdaibai_Estuary/regional_rcp45/oka_reg_rcp45_2017_17g.tif",
+                "2067": "results/saltmarshes/Urdaibai_Estuary/regional_rcp45/oka_reg_rcp45_2067_17g.tif",
+                "2117": "results/saltmarshes/Urdaibai_Estuary/regional_rcp45/oka_reg_rcp45_2117_17g.tif"
+                # "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2017_17g.tif",
+                # "2067": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2067_17g.tif",
+                # "2117": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2117_17g.tif"
             },
             "accretion": {
-                "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2017_17g_accretion.tif",
-                "2067": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2067_17g_accretion.tif",
-                "2117": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2117_17g_accretion.tif"
+                "2017": "results/saltmarshes/Urdaibai_Estuary/regional_rcp45/oka_reg_rcp45_2017_17g_accretion.tif",
+                "2067": "results/saltmarshes/Urdaibai_Estuary/regional_rcp45/oka_reg_rcp45_2067_17g_accretion.tif",
+                "2117": "results/saltmarshes/Urdaibai_Estuary/regional_rcp45/oka_reg_rcp45_2117_17g_accretion.tif"
+                # "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2017_17g_accretion.tif",
+                # "2067": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2067_17g_accretion.tif",
+                # "2117": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp45\oka_reg_rcp45_2117_17g_accretion.tif"
             }
         },
         "regional_rcp85": {
             "habitats": {
-                "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp45_2017_17g.tif",
-                "2067": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp85_2067_17g.tif",
-                "2117": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp85_2117_17g.tif"
+                "2017": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2017_17g.tif",
+                "2067": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2067_17g.tif",
+                "2117": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2117_17g.tif"
+                # "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp45_2017_17g.tif",
+                # "2067": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp85_2067_17g.tif",
+                # "2117": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp85_2117_17g.tif"
             },
             "accretion": {
-                "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp45_2017_17g_accretion.tif",
-                "2067": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp85_2067_17g_accretion.tif",
-                "2117": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp85_2117_17g_accretion.tif"
+                "2017": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2017_17g_accretion.tif",
+                "2067": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2067_17g_accretion.tif",
+                "2117": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2117_17g_accretion.tif"
+                # "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp45_2017_17g_accretion.tif",
+                # "2067": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp85_2067_17g_accretion.tif",
+                # "2117": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp85_2117_17g_accretion.tif"
             }
         },
         "global_rcp45":  {
             "habitats": {
-                "2017": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_reg_rcp45_2017_17g.tif",
-                "2067": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_glo_rcp45_2067_17g.tif",
-                "2117": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_glo_rcp45_2117_17g.tif"
+                "2017": "results/saltmarshes/Urdaibai_Estuary/global_rcp45/oka_reg_rcp45_2017_17g.tif",
+                "2067": "results/saltmarshes/Urdaibai_Estuary/global_rcp45/oka_glo_rcp45_2067_17g.tif",
+                "2117": "results/saltmarshes/Urdaibai_Estuary/global_rcp45/oka_glo_rcp45_2117_17g.tif"
+                # "2017": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_reg_rcp45_2017_17g.tif",
+                # "2067": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_glo_rcp45_2067_17g.tif",
+                # "2117": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_glo_rcp45_2117_17g.tif"
             },
             "accretion": {
-                "2017": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_reg_rcp45_2017_17g_accretion.tif",
-                "2067": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_glo_rcp45_2067_17g_accretion.tif",
-                "2117": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_glo_rcp45_2117_17g_accretion.tif"
+                "2017": "results/saltmarshes/Urdaibai_Estuary/global_rcp45/oka_reg_rcp45_2017_17g_accretion.tif",
+                "2067": "results/saltmarshes/Urdaibai_Estuary/global_rcp45/oka_glo_rcp45_2067_17g_accretion.tif",
+                "2117": "results/saltmarshes/Urdaibai_Estuary/global_rcp45/oka_glo_rcp45_2117_17g_accretion.tif"
+                # "2017": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_reg_rcp45_2017_17g_accretion.tif",
+                # "2067": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_glo_rcp45_2067_17g_accretion.tif",
+                # "2117": r"results\saltmarshes\Urdaibai_Estuary\global_rcp45\oka_glo_rcp45_2117_17g_accretion.tif"
             }
         }
     },
