@@ -992,41 +992,124 @@ def create_layout():  # definir función que construye el layout
                     # almacen para los layer de activities additional information
                     dcc.Store(id="layer-order", data=[]),
 
-                    # modal de bienvenida
+                    # MODAL DE BIENVENIDA - ORIGINAL (COMENTADO)
+                    # dbc.Modal(
+                    #     [
+                    #         dbc.ModalHeader(dbc.ModalTitle("Welcome")),
+                    #         dbc.ModalBody(
+                    #             html.Div(
+                    #                 [
+                    #                     html.Div(
+                    #                         ["Welcome to the Marine Ecosystem Service Assessment Tool (MESAT). Here you can explore different management scenarios and their impacts on marine ecosystems, developed under the Ph.D. Thesis ",
+                    #                         html.A("Egidazu-de la Parte(2026)", href="link/to/phd/thesis", target="_blank")
+                    #                         ]),
+                    #                     html.P(html.A("Read the documentation", href="https://begidazu.github.io/MESAT/")),
+                    #                     html.Div(
+                    #                         dbc.Checkbox(
+                    #                             id="welcome-dont-show",
+                    #                             label="Don't show this again",
+                    #                             value=False,
+                    #                             className="mt-2"
+                    #                         )
+                    #                     ),
+                    #                 ]
+                    #             )
+                    #         ),
+                    #         dbc.ModalFooter(
+                    #             dbc.Button("Continue", id="welcome-close", n_clicks=0, className="ms-auto")
+                    #         ),
+                    #     ],
+                    #     id="welcome-modal",
+                    #     is_open=True,
+                    #     centered=True,
+                    #     scrollable=True,
+                    #     backdrop="static",
+                    #     keyboard=False,
+                    #     size="xl",
+                    # ),
+
+                    # MODAL DE BIENVENIDA - VERSIÓN MEJORADA RESPONSIVE
                     dbc.Modal(
                         [
-                            dbc.ModalHeader(dbc.ModalTitle("Welcome")),
                             dbc.ModalBody(
                                 html.Div(
                                     [
+                                        # Icono de información
                                         html.Div(
-                                            ["Welcome to the Marine Ecosystem Service Assessment Tool (MESAT). Here you can explore different management scenarios and their impacts on marine ecosystems, developed under ",
-                                            html.A("Egidazu-de la Parte(2026)", href="link/to/phd/thesis", target="_blank")
-                                            ]),
-                                        html.P(html.A("Read the documentation", href="https://begidazu.github.io/MESAT/")),
-                                        html.Div(
-                                            dbc.Checkbox(
-                                                id="welcome-dont-show",
-                                                label="Don't show this again",
-                                                value=False,
-                                                className="mt-2"
-                                            )
+                                            html.I(className="bi bi-info-circle", style={"color": "#5db4de"}),
+                                            className="text-center mb-4 pt-3"
                                         ),
-                                    ]
+                                        
+                                        # Título
+                                        html.H2("Welcome", className="text-center mb-1 fw-bold"),
+                                        
+                                        # Descripción
+                                        html.P(
+                                            "Welcome to the Marine Ecosystem Service Assessment Tool (MESAT). Here you can explore different management scenarios and their impacts on marine ecosystems.",
+                                            className="text-center text-muted mb-4"
+                                        ),
+                                        
+                                        # Card 1
+                                        html.A(
+                                            dbc.Card(
+                                                dbc.CardBody(
+                                                    html.Div(
+                                                        [
+                                                            html.I(className="bi bi-book", style={"color": "#0d4a8e"}),
+                                                            html.Div(
+                                                                [
+                                                                    html.H5(
+                                                                        ["Read the app documentation ", html.I(className="bi bi-box-arrow-up-right")],
+                                                                        className="mb-2 text-primary"
+                                                                    ),
+                                                                    html.P(
+                                                                        "Explore the full details of the applied frameworks used to produce the assessments.",
+                                                                        className="mb-0 small text-muted"
+                                                                    )
+                                                                ]
+                                                            )
+                                                        ],
+                                                        className="d-flex gap-3"
+                                                    )
+                                                ),
+                                                className="border-0 shadow-sm mb-4"
+                                            ),
+                                            href="https://begidazu.github.io/MESAT/",
+                                            target="_blank",     # Abre en pestaña nueva
+                                            style={"textDecoration": "none"} # Quita el subrayado azul de link
+                                        ),
+                                        
+                                        
+                                        # Botón
+                                        dbc.Button(
+                                            "Go to the app",
+                                            id="welcome-close",
+                                            n_clicks=0,
+                                            color="primary",
+                                            className="w-100 mb-3"
+                                        ),
+                                        
+                                        # Checkbox
+                                        dbc.Checkbox(
+                                            id="welcome-dont-show",
+                                            label="Don't show this again",
+                                            value=False,
+                                            className="text-center small text-muted"
+                                        )
+                                    ],
+                                    className="p-4"
                                 )
-                            ),
-                            dbc.ModalFooter(
-                                dbc.Button("Continue", id="welcome-close", n_clicks=0, className="ms-auto")
-                            ),
+                            )
                         ],
                         id="welcome-modal",
-                        is_open=True,          # ← se abre al cargar (el callback decidirá si mostrar o no)
+                        is_open=True,
                         centered=True,
                         scrollable=True,
-                        backdrop="static",     # ← evita cerrar clicando fuera
-                        keyboard=False,        # ← evita cerrar con ESC
-                        size="xl",             # ← base; el ancho real lo controlamos en CSS
+                        backdrop="static",
+                        keyboard=False,
+                        dialogClassName="welcome-modal-custom"
                     ),
+
                 ]
             )
         ]

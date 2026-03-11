@@ -305,3 +305,118 @@ img, canvas { /* elementos gráficos */
 
 /* Ocúltalo fuera del tab Management si ya usas esa lógica */
 .layers-panel.hidden, .layers-btn.hidden { display: none !important; }
+
+
+/* WELCOME MODAL CSS - RESPONSIVE */
+
+/* 1. ESTRUCTURA Y ANCHO DEL MODAL */
+@media (min-width: 992px) {
+    .welcome-modal-custom {
+        width: 55vw !important; 
+        max-width: none !important; 
+        min-width: 650px !important;
+        margin: 2rem auto !important;
+    }
+}
+
+/* 2. CONTENIDO Y TÍTULOS */
+.welcome-modal-custom .modal-content {
+    border-radius: 20px !important;
+    border: none !important;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2) !important;
+}
+
+.welcome-modal-custom .bi-info-circle {
+    font-size: 4rem !important;
+    color: #5db4de;
+    margin-bottom: 0.2rem !important;
+}
+
+/* 3. CARDS (Ahora con efecto de link) */
+.welcome-modal-custom a {
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.welcome-modal-custom a:hover {
+    transform: translateY(-3px);
+    text-decoration: none !important;
+}
+
+.welcome-modal-custom .card {
+    border-left: 6px solid #0d4a8e !important;
+    background-color: #f8fbff !important;
+    cursor: pointer; /* Indica que es clickable */
+}
+
+.welcome-modal-custom .card h5 {
+    display: flex !important;
+    align-items: center !important; 
+    gap: 12px; 
+    font-size: 1.5rem !important; /* Aumentado de 1.35 a 1.5 */
+    font-weight: 700 !important;
+    margin-bottom: 0.6rem !important;
+}
+
+.welcome-modal-custom .card p {
+    font-size: 1.2rem !important; /* Aumentado de 1.1 a 1.2 */
+    line-height: 1.6 !important;
+    color: #495057 !important;
+}
+
+/* Ajuste proporcional para la flechita de link */
+.welcome-modal-custom .card h5 .bi-box-arrow-up-right {
+    font-size: 1.2rem !important; 
+    flex-shrink: 0;
+}
+
+.welcome-modal-custom .card .bi {
+    font-size: 3.5rem !important; /* <--- Cambia este valor para el tamaño general */
+    margin-right: 1.5rem !important; /* Espacio entre icono y texto */
+    flex-shrink: 0; /* Evita que el icono se deforme */
+    display: flex;
+    align-items: center;
+}
+
+/* OPCIONAL: Si quieres cambiar específicamente la flechita de "enlace externo" */
+.welcome-modal-custom .card h5 .bi-box-arrow-up-right {
+    font-size: 1.1rem !important; /* Tamaño de la flechita pequeña */
+    margin-left: 5px;
+}
+
+/* 4. BOTÓN "GO TO THE APP" */
+.welcome-modal-custom .btn-primary {
+    background-color: #0d4a8e !important;
+    padding: 0.8rem 3rem !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+    width: fit-content !important; 
+    display: block !important;
+    margin: 1.5rem auto 1rem auto !important; /* Centrado horizontal */
+}
+
+/* 5. CHECKBOX "DON'T SHOW AGAIN" (Centrado Total) */
+/* Forzamos al contenedor del checkbox a ocupar todo el ancho para poder centrar */
+.welcome-modal-custom .form-check {
+    display: flex !important;
+    justify-content: center !important; /* Centrado horizontal respecto al modal */
+    align-items: center !important;
+    width: 100% !important; 
+    gap: 10px;
+    margin: 1rem 0 0 0 !important;
+    padding: 0 !important;
+}
+
+/* Ajuste fino del input para que no mueva el texto */
+.welcome-modal-custom .form-check-input {
+    margin: 0 !important;
+    float: none !important; /* Quita el comportamiento por defecto de Bootstrap */
+    cursor: pointer;
+}
+
+.welcome-modal-custom .form-check-label {
+    font-size: 1rem !important;
+    color: #6c757d;
+    cursor: pointer;
+    margin: 0 !important;
+}
