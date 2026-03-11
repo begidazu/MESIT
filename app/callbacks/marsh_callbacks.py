@@ -350,13 +350,13 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
                                                         ),
                                                         dcc.Input(
                                                             id='eva-overscale-quadrat-size',
-                                                            type="number", min=250, max=5000, step=250,
+                                                            type="number", min=1000, max=10000, step=1000,
                                                             placeholder="Quadrat Grid Size in meters",
                                                             className="form-control",
                                                             disabled=True
                                                         ),
                                                         dbc.Tooltip(
-                                                            "Quadrat grid size. Min 250, max 5000. Use multiples of 250",
+                                                            "Quadrat grid size. Min 1'000 m, max 10'000 m. Use multiples of 1'000",
                                                             target="eva-overscale-quadrat-size", placement="auto"
                                                         ),
                                                     ],
@@ -1402,7 +1402,8 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
             "tab-saltmarsh":  ("Access the methodology", "Access the code"),
             "tab-physical":   ("Access the methodology", "Access the code"),
             "tab-fishstock":  ("Fish Stocks docs", "Fish Stocks code"),
-            "tab-management": ("Management docs", "Management code"),
+            "tab-management": ("Access the documentation", "Access the code"),
+            "tab-eva-overscale": ("Access the methodology", "Access the code")
         }
         urls = {
             "tab-saltmarsh":  ("https://doi.org/10.1016/j.scitotenv.2024.178164",
@@ -1410,7 +1411,11 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
             "tab-physical":   ("https://doi.org/10.1016/j.indic.2026.101163",
                             "https://github.com/begidazu/PhD_Web_App/blob/physical_accounts/app/models/opsa.py"),
             "tab-fishstock":  (),
-            "tab-management": (),
+            "tab-management": ("https://begidazu.github.io/MESAT/management_scenarios.html", 
+                               "https://github.com/begidazu/MESAT/tree/main/app"),
+            "tab-eva-overscale": ("https://begidazu.github.io/MESAT/eva_overscale.html",
+                                  "https://github.com/begidazu/MESAT/blob/main/app/models/eva_mpaeu.py")
+                                  
         }
         m_text, c_text = labels.get(tab, labels["tab-saltmarsh"])
         m_href, c_href = urls.get(tab, urls["tab-saltmarsh"])
