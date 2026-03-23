@@ -15,10 +15,6 @@ import numpy as np  # numérico
 import time, json
 import geopandas as gpd
 
-# BACKUP ORIGINAL: Importar helper de rutas para producción
-# Las rutas relativas se convierten a absolutas usando resolve_path()
-from ..config import resolve_path
-
 # =============================
 # Constantes y utilidades
 # =============================
@@ -1014,9 +1010,7 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
             return [], [], True, False, False, True, True, []
         
         scen = 'regional_rcp45'
-        # BACKUP ORIGINAL: tif_dir = os.path.join(os.getcwd(),"results","saltmarshes",area,scen)
-        # CAMBIO: Usar resolve_path() para convertir ruta relativa a absoluta
-        tif_dir = resolve_path(os.path.join("results", "saltmarshes", area, scen))
+        tif_dir = os.path.join(os.getcwd(),"results","saltmarshes",area,scen)  # construir ruta al directorio de TIFs
         matches = glob.glob(os.path.join(tif_dir,f"*{year}*.tif"))  # buscar el TIF del año
         if not matches:  # comprobar que existe el TIF
             raise PreventUpdate  # no actualizar si no hay datos
@@ -1035,14 +1029,12 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
         )
 
         # Get the training dataset of the study areas and add it to map:
-        # BACKUP ORIGINAL: os.path.join(os.getcwd(), "data", ...)
-        # CAMBIO: Usar resolve_path() para convertir rutas relativas a absolutas
         if area == "Urdaibai_Estuary":
-            points_path = resolve_path(os.path.join("data", "Urdaibai_Estuary", "urdaibai_estuary_training_dataset.parquet"))
+            points_path = os.path.join(os.getcwd(), "data", "Urdaibai_Estuary", "urdaibai_estuary_training_dataset.parquet")
         elif area == "Bay_of_Santander":
-            points_path = resolve_path(os.path.join("data", "Bay_of_Santander", "bay_santander_training_dataset.parquet"))
+            points_path = os.path.join(os.getcwd(), "data", "Bay_of_Santander", "bay_santander_training_dataset.parquet")
         elif area == "Cadiz_Bay":
-            points_path = resolve_path(os.path.join("data", "Cadiz_Bay", "cadiz_bay_training_dataset.parquet"))
+            points_path = os.path.join(os.getcwd(), "data", "Cadiz_Bay", "cadiz_bay_training_dataset.parquet")
         else:
             points_path = None
 
@@ -1150,9 +1142,7 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
             raise PreventUpdate
 
         def class_tif(area, scen, year):  # localizar tif de clases
-            # BACKUP ORIGINAL: base = os.path.join(os.getcwd(), "results", "saltmarshes", area, scen)
-            # CAMBIO: Usar resolve_path() para convertir ruta relativa a absoluta
-            base = resolve_path(os.path.join("results", "saltmarshes", area, scen))
+            base = os.path.join(os.getcwd(), "results", "saltmarshes", area, scen)  # carpeta base
             hits = glob.glob(os.path.join(base, f"*{year}*.tif")) + glob.glob(os.path.join(base, f"*{year}*.tiff"))  # candidatos
             hits = [p for p in hits if "accretion" not in os.path.basename(p).lower()]  # excluir acreción
             return sorted(hits)[0] if hits else None  # devolver primero o None
@@ -1329,9 +1319,7 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
             raise PreventUpdate
 
         def class_tif(area, scen, year):  # helper localizar tif de clases
-            # BACKUP ORIGINAL: base = os.path.join(os.getcwd(), "results", "saltmarshes", area, scen)
-            # CAMBIO: Usar resolve_path() para convertir ruta relativa a absoluta
-            base = resolve_path(os.path.join("results", "saltmarshes", area, scen))
+            base = os.path.join(os.getcwd(), "results", "saltmarshes", area, scen)  # ruta base
             hits = glob.glob(os.path.join(base, f"*{year}*.tif")) + glob.glob(os.path.join(base, f"*{year}*.tiff"))  # candidatos
             hits = [p for p in hits if "accretion" not in os.path.basename(p).lower()]  # excluir acreción
             return sorted(hits)[0] if hits else None  # primero o None
@@ -1391,9 +1379,7 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
             raise PreventUpdate
         scen_map = {'reg45':'regional_rcp45','reg85':'regional_rcp85','glo45':'global_rcp45'}
         scen = scen_map[selected]
-        # BACKUP ORIGINAL: base = os.path.join(os.getcwd(), "results", "saltmarshes", area, scen)
-        # CAMBIO: Usar resolve_path() para convertir ruta relativa a absoluta
-        base = resolve_path(os.path.join("results", "saltmarshes", area, scen))
+        base = os.path.join(os.getcwd(), "results", "saltmarshes", area, scen)
         matches = sorted(glob.glob(os.path.join(base, f"*{year}*.tif")))
         if not matches:
             return []
