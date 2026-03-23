@@ -10,6 +10,10 @@ import rasterio
 from rasterio.mask import mask as rio_mask
 from rasterio.warp import reproject, Resampling
 
+# BACKUP ORIGINAL: Importar helper de rutas para producción
+# Las rutas relativas se convierten a absolutas usando resolve_path()
+from ..config import resolve_path
+
 EUNIS_PATHS = {
     "Santander":  "results/opsa/Santander/eunis_santander.parquet",     
     "North_Sea":  "results/opsa/North_Sea/eunis_north_sea.parquet",    
@@ -19,8 +23,12 @@ EUNIS_PATHS = {
 def eunis_available(area: str) -> bool:                
     return area in EUNIS_PATHS                               
 
-def eunis_path(area: str):                                 
-    return EUNIS_PATHS.get(area) 
+# BACKUP ORIGINAL: def eunis_path(area: str): return EUNIS_PATHS.get(area)
+def eunis_path(area: str):
+    """Devuelve la ruta absoluta al parquet EUNIS del área.
+    CAMBIO: Convierte ruta relativa a absoluta para uso en producción."""
+    rel_path = EUNIS_PATHS.get(area)
+    return resolve_path(rel_path) if rel_path else None 
 
 SALTMARSH_PATHS = {
     "Santander": ["results/saltmarshes/Bay_of_Santander/regional_rcp45/santander_reg_rcp45_2012_7g.tif", "results/saltmarshes/Bay_of_Santander/regional_rcp45/santander_reg_rcp45_2012_7g_accretion.tif"],
@@ -50,7 +58,7 @@ SALTMARSH_SCENARIOS_PATHS = {
         },
         "regional_rcp85": {
             "habitats": {
-                "2012": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2012_7g.tif",
+                "2012": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp45_2012_7g.tif",
                 "2062": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2062_7g.tif",
                 "2112": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2112_7g.tif"
                 # "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp45_2012_7g.tif",
@@ -58,7 +66,7 @@ SALTMARSH_SCENARIOS_PATHS = {
                 # "2112": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp85_2112_7g.tif"
             },
             "accretion": {
-                "2012": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2012_7g_accretion.tif",
+                "2012": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp45_2012_7g_accretion.tif",
                 "2062": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2062_7g_accretion.tif",
                 "2112": "results/saltmarshes/Bay_of_Santander/regional_rcp85/santander_reg_rcp85_2112_7g_accretion.tif"
                 # "2012": r"results\saltmarshes\Bay_of_Santander\regional_rcp85\santander_reg_rcp45_2012_7g_accretion.tif",
@@ -107,7 +115,7 @@ SALTMARSH_SCENARIOS_PATHS = {
         },
         "regional_rcp85": {
             "habitats": {
-                "2023": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2023_25g.tif",
+                "2023": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp45_2023_25g.tif",
                 "2073": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2073_25g.tif",
                 "2123": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2123_25g.tif"
                 # "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp45_2023_25g.tif",
@@ -115,7 +123,7 @@ SALTMARSH_SCENARIOS_PATHS = {
                 # "2123": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp85_2123_25g.tif"
             },
             "accretion": {
-                "2023": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2023_25g_accretion.tif",
+                "2023": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp45_2023_25g_accretion.tif",
                 "2073": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2073_25g_accretion.tif",
                 "2123": "results/saltmarshes/Cadiz_Bay/regional_rcp85/cadiz_reg_rcp85_2123_25g_accretion.tif"
                 # "2023": r"results\saltmarshes\Cadiz_Bay\regional_rcp85\cadiz_reg_rcp45_2023_25g_accretion.tif",
@@ -164,7 +172,7 @@ SALTMARSH_SCENARIOS_PATHS = {
         },
         "regional_rcp85": {
             "habitats": {
-                "2017": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2017_17g.tif",
+                "2017": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp45_2017_17g.tif",
                 "2067": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2067_17g.tif",
                 "2117": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2117_17g.tif"
                 # "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp45_2017_17g.tif",
@@ -172,7 +180,7 @@ SALTMARSH_SCENARIOS_PATHS = {
                 # "2117": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp85_2117_17g.tif"
             },
             "accretion": {
-                "2017": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2017_17g_accretion.tif",
+                "2017": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp45_2017_17g_accretion.tif",
                 "2067": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2067_17g_accretion.tif",
                 "2117": "results/saltmarshes/Urdaibai_Estuary/regional_rcp85/oka_reg_rcp85_2117_17g_accretion.tif"
                 # "2017": r"results\saltmarshes\Urdaibai_Estuary\regional_rcp85\oka_reg_rcp45_2017_17g_accretion.tif",
@@ -219,9 +227,15 @@ def saltmarsh_scenario_years(area: str, scenario_key: str):
     return years
 
 def saltmarsh_scenario_paths(area: str, scenario_key: str, year: str):
+    """Devuelve las rutas de habitat y accretion para un escenario y año.
+    CAMBIO: Convierte rutas relativas a absolutas para uso en producción."""
     node = SALTMARSH_SCENARIOS_PATHS.get(area, {}).get(scenario_key, {})
-    h = _norm((node.get("habitats") or {}).get(year))
-    a = _norm((node.get("accretion") or {}).get(year))
+    # BACKUP ORIGINAL: h = _norm((node.get("habitats") or {}).get(year))
+    #                  a = _norm((node.get("accretion") or {}).get(year))
+    h_rel = (node.get("habitats") or {}).get(year)
+    a_rel = (node.get("accretion") or {}).get(year)
+    h = resolve_path(h_rel) if h_rel else None
+    a = resolve_path(a_rel) if a_rel else None
     return h, a
 
 SALTMARSH_MAP: Dict[int, str] = {
@@ -234,13 +248,23 @@ SALTMARSH_MAP: Dict[int, str] = {
 def saltmarsh_available(area: str) -> bool:
     return area in SALTMARSH_PATHS
 
+# BACKUP ORIGINAL: def saltmarsh_habitat_path(area: str): paths = SALTMARSH_PATHS.get(area); return paths[0] if paths else None
 def saltmarsh_habitat_path(area: str):
+    """Devuelve la ruta absoluta del TIF de habitat de saltmarsh del área.
+    CAMBIO: Convierte ruta relativa a absoluta para uso en producción."""
     paths = SALTMARSH_PATHS.get(area)
-    return paths[0] if paths else None
+    if paths:
+        return resolve_path(paths[0])
+    return None
 
+# BACKUP ORIGINAL: def saltmarsh_accretion_path(area: str): paths = SALTMARSH_PATHS.get(area); return paths[1] if paths else None
 def saltmarsh_accretion_path(area: str):
+    """Devuelve la ruta absoluta del TIF de accretion de saltmarsh del área.
+    CAMBIO: Convierte ruta relativa a absoluta para uso en producción."""
     paths = SALTMARSH_PATHS.get(area)
-    return paths[1] if paths else None
+    if paths:
+        return resolve_path(paths[1])
+    return None
 
 # Function to merge both drawn and uploaded activities:
 def _collect_activity_union(activity_children, activity_upload_children) -> gpd.GeoDataFrame:
