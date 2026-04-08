@@ -374,7 +374,7 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
                                 id = 'eva-overscale-time-div',
                                 style={'marginTop':'10px', 'textAlign':'center'},
                                 children = [
-                                    html.Img(src='./assets/logos/warning.png', style={'width':'32px','height':'32px'}), 
+                                    html.Img(src='assets/logos/warning.png', style={'width':'32px','height':'32px'}), 
                                     html.Span(" Be patient! The computation may take several minutes!", className="form-check-label")
                                 ]
                             ),
@@ -770,7 +770,7 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
                         type="dot",
                         color='#2c3e50',
                         children=[
-                            html.Legend("Economic activities affection to ecosystems", className="mt-4", id="mgmt-legend-affection", hidden=True),
+                            html.Legend("Economic activities impact to ecosystems", className="mt-4", id="mgmt-legend-affection", hidden=True),
                             html.Div(id="mgmt-table", style={'marginTop': '20px'}),
                             html.Div(
                                 id='mgmt-button-bar',
@@ -1411,10 +1411,10 @@ def register_tab_callbacks(app: dash.Dash):  # registrar callbacks
             "tab-physical":   ("https://doi.org/10.1016/j.indic.2026.101163",
                             "https://github.com/begidazu/PhD_Web_App/blob/physical_accounts/app/models/opsa.py"),
             "tab-fishstock":  (),
-            "tab-management": ("https://begidazu.github.io/MESAT/management_scenarios.html", 
-                               "https://github.com/begidazu/MESAT/tree/main/app"),
-            "tab-eva-overscale": ("https://begidazu.github.io/MESAT/eva_overscale.html",
-                                  "https://github.com/begidazu/MESAT/blob/main/app/models/eva_mpaeu.py")
+            "tab-management": ("https://begidazu.github.io/MESIT/management_scenarios.html", 
+                               "https://github.com/begidazu/MESIT/tree/main/app"),
+            "tab-eva-overscale": ("https://begidazu.github.io/MESIT/eva_overscale.html",
+                                  "https://github.com/begidazu/MESIT/blob/main/app/models/eva_mpaeu.py")
                                   
         }
         m_text, c_text = labels.get(tab, labels["tab-saltmarsh"])
